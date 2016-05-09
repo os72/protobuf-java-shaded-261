@@ -28,15 +28,24 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// Author: liujisi@google.com (Pherl Liu)
+package com.github.os72.protobuf261;
 
-
-package protobuf_unittest_import;
-
-option optimize_for = LITE_RUNTIME;
-
-option java_package = "com.github.os72.protobuf261";
-
-message PublicImportMessageLite {
-  optional int32 e = 1;
+/**
+ * <p>Abstract interface for a blocking RPC channel.  {@code BlockingRpcChannel}
+ * is the blocking equivalent to {@link RpcChannel}.
+ *
+ * @author kenton@google.com Kenton Varda
+ * @author cpovirk@google.com Chris Povirk
+ */
+public interface BlockingRpcChannel {
+  /**
+   * Call the given method of the remote service and blocks until it returns.
+   * {@code callBlockingMethod()} is the blocking equivalent to
+   * {@link RpcChannel#callMethod}.
+   */
+  Message callBlockingMethod(
+      Descriptors.MethodDescriptor method,
+      RpcController controller,
+      Message request,
+      Message responsePrototype) throws ServiceException;
 }

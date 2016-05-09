@@ -28,15 +28,33 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// Author: liujisi@google.com (Pherl Liu)
+package com.github.os72.protobuf261;
 
+/**
+ * Base interface for methods common to {@link MessageLite}
+ * and {@link MessageLite.Builder} to provide type equivalency.
+ *
+ * @author jonp@google.com (Jon Perlow)
+ */
+public interface MessageLiteOrBuilder {
+  /**
+   * Get an instance of the type with no fields set. Because no fields are set,
+   * all getters for singular fields will return default values and repeated
+   * fields will appear empty.
+   * This may or may not be a singleton.  This differs from the
+   * {@code getDefaultInstance()} method of generated message classes in that
+   * this method is an abstract method of the {@code MessageLite} interface
+   * whereas {@code getDefaultInstance()} is a static method of a specific
+   * class.  They return the same thing.
+   */
+  MessageLite getDefaultInstanceForType();
 
-package protobuf_unittest_import;
+  /**
+   * Returns true if all required fields in the message and all embedded
+   * messages are set, false otherwise.
+   *
+   * <p>See also: {@link MessageOrBuilder#getInitializationErrorString()}
+   */
+  boolean isInitialized();
 
-option optimize_for = LITE_RUNTIME;
-
-option java_package = "com.github.os72.protobuf261";
-
-message PublicImportMessageLite {
-  optional int32 e = 1;
 }

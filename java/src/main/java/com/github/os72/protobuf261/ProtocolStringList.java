@@ -28,15 +28,21 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// Author: liujisi@google.com (Pherl Liu)
+package com.github.os72.protobuf261;
 
+import java.util.List;
 
-package protobuf_unittest_import;
+/**
+ * An interface extending {@code List<String>} used for repeated string fields
+ * to provide optional access to the data as a list of ByteStrings. The
+ * underlying implementation stores values as either ByteStrings or Strings
+ * (see {@link LazyStringArrayList}) depending on how the value was initialized
+ * or last read, and it is often more efficient to deal with lists of
+ * ByteStrings when handling protos that have been deserialized from bytes.
+ */
+public interface ProtocolStringList extends List<String> {
 
-option optimize_for = LITE_RUNTIME;
+  /** Returns a view of the data as a list of ByteStrings. */
+  List<ByteString> asByteStringList();
 
-option java_package = "com.github.os72.protobuf261";
-
-message PublicImportMessageLite {
-  optional int32 e = 1;
 }

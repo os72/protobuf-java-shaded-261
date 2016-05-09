@@ -28,15 +28,21 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// Author: liujisi@google.com (Pherl Liu)
+package com.github.os72.protobuf261;
 
+/**
+ * A prerun for a test suite that allows running the full protocol buffer
+ * tests in a mode that disables the optimization for not using
+ * {@link RepeatedFieldBuilder} and {@link SingleFieldBuilder} until they are
+ * requested. This allows us to run all the tests through both code paths
+ * and ensures that both code paths produce identical results.
+ *
+ * @author jonp@google.com (Jon Perlow)
+ */
+public class ForceFieldBuildersPreRun implements Runnable {
 
-package protobuf_unittest_import;
-
-option optimize_for = LITE_RUNTIME;
-
-option java_package = "com.github.os72.protobuf261";
-
-message PublicImportMessageLite {
-  optional int32 e = 1;
+  //@Override (Java 1.6 override semantics, but we must support 1.5)
+  public void run() {
+    GeneratedMessage.enableAlwaysUseFieldBuildersForTesting();
+  }
 }

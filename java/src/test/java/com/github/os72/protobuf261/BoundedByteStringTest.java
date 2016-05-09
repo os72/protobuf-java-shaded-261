@@ -28,15 +28,41 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// Author: liujisi@google.com (Pherl Liu)
+package com.github.os72.protobuf261;
 
+import java.io.UnsupportedEncodingException;
 
-package protobuf_unittest_import;
+/**
+ * This class tests {@link BoundedByteString}, which extends {@link LiteralByteString},
+ * by inheriting the tests from {@link LiteralByteStringTest}.  The only method which
+ * is strange enough that it needs to be overridden here is {@link #testToString()}.
+ *
+ * @author carlanton@google.com (Carl Haverl)
+ */
+public class BoundedByteStringTest extends LiteralByteStringTest {
 
-option optimize_for = LITE_RUNTIME;
+  @Override
+  protected void setUp() throws Exception {
+    classUnderTest = "BoundedByteString";
+    byte[] sourceBytes = ByteStringTest.getTestBytes(2341, 11337766L);
+    int from = 100;
+    int to = sourceBytes.length - 100;
+    stringUnderTest = ByteString.copyFrom(sourceBytes).substring(from, to);
+    referenceBytes = new byte[to - from];
+    System.arraycopy(sourceBytes, from, referenceBytes, 0, to - from);
+    expectedHashCode = 727575887;
+  }
 
-option java_package = "com.github.os72.protobuf261";
+  @Override
+  public void testToString() throws UnsupportedEncodingException {
+    String testString = "I love unicode \u1234\u5678 characters";
+    LiteralByteString unicode = new LiteralByteString(testString.getBytes(UTF_8));
+    ByteString chopped = unicode.substring(2, unicode.size() - 6);
+    assertEquals(classUnderTest + ".substring() must have the expected type",
+        classUnderTest, getActualClassName(chopped));
 
-message PublicImportMessageLite {
-  optional int32 e = 1;
+    String roundTripString = chopped.toString(UTF_8);
+    assertEquals(classUnderTest + " unicode bytes must match",
+        testString.substring(2, testString.length() - 6), roundTripString);
+  }
 }

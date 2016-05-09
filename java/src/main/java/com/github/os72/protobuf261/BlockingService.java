@@ -28,15 +28,37 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// Author: liujisi@google.com (Pherl Liu)
+package com.github.os72.protobuf261;
 
+/**
+ * Blocking equivalent to {@link Service}.
+ *
+ * @author kenton@google.com Kenton Varda
+ * @author cpovirk@google.com Chris Povirk
+ */
+public interface BlockingService {
+  /**
+   * Equivalent to {@link Service#getDescriptorForType}.
+   */
+  Descriptors.ServiceDescriptor getDescriptorForType();
 
-package protobuf_unittest_import;
+  /**
+   * Equivalent to {@link Service#callMethod}, except that
+   * {@code callBlockingMethod()} returns the result of the RPC or throws a
+   * {@link ServiceException} if there is a failure, rather than passing the
+   * information to a callback.
+   */
+  Message callBlockingMethod(Descriptors.MethodDescriptor method,
+                             RpcController controller,
+                             Message request) throws ServiceException;
 
-option optimize_for = LITE_RUNTIME;
+  /**
+   * Equivalent to {@link Service#getRequestPrototype}.
+   */
+  Message getRequestPrototype(Descriptors.MethodDescriptor method);
 
-option java_package = "com.github.os72.protobuf261";
-
-message PublicImportMessageLite {
-  optional int32 e = 1;
+  /**
+   * Equivalent to {@link Service#getResponsePrototype}.
+   */
+  Message getResponsePrototype(Descriptors.MethodDescriptor method);
 }

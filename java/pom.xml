@@ -4,21 +4,21 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.google</groupId>
-    <artifactId>google</artifactId>
-    <version>1</version>
+	<groupId>org.sonatype.oss</groupId>
+	<artifactId>oss-parent</artifactId>
+	<version>9</version>
   </parent>
-  <groupId>com.google.protobuf</groupId>
-  <artifactId>protobuf-java</artifactId>
-  <version>2.6.1</version>
-  <packaging>bundle</packaging>
-  <name>Protocol Buffer Java API</name>
+  <groupId>com.github.os72</groupId>
+  <artifactId>protobuf-java-shaded-261</artifactId>
+  <version>0.9-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>Protocol Buffer Java API - shaded version 2.6.1</name>
   <description>
     Protocol Buffers are a way of encoding structured data in an efficient yet
     extensible format.
   </description>
   <inceptionYear>2008</inceptionYear>
-  <url>https://developers.google.com/protocol-buffers/</url>
+  <url>https://github.com/os72/protobuf-java-shaded-261</url>
   <licenses>
     <license>
       <name>New BSD license</name>
@@ -26,13 +26,24 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+  <developers>
+	<developer>
+	  <id>os72</id>
+	  <name>Oliver Suciu</name>
+	</developer>
+  </developers>
   <scm>
-    <url>https://github.com/google/protobuf</url>
-    <connection>
-      scm:git:https://github.com/google/protobuf.git
-    </connection>
+	<connection>scm:git:git@github.com:os72/protobuf-java-shaded-261.git</connection>
+	<developerConnection>scm:git:git@github.com:os72/protobuf-java-shaded-261.git</developerConnection>
+	<url>git@github.com:os72/protobuf-java-shaded-261.git</url>
   </scm>
   <dependencies>
+    <dependency>
+	  <groupId>com.github.os72</groupId>
+	  <artifactId>protoc-jar</artifactId>
+	  <version>3.0.0-b2.1</version>
+      <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -78,11 +89,17 @@
             <configuration>
               <tasks>
                 <mkdir dir="target/generated-sources" />
-                <exec executable="../src/protoc">
+                <exec executable="java">
+                  <arg value="-jar" />
+                  <arg value="${maven.dependency.com.github.os72.protoc-jar.jar.path}" />
+                  <arg value="-v261" />
                   <arg value="--java_out=target/generated-sources" />
                   <arg value="--proto_path=../src" />
                   <arg value="../src/google/protobuf/descriptor.proto" />
                 </exec>
+                <replace token="com.google.protobuf" value="com.github.os72.protobuf261" dir="target/generated-sources">
+                  <include name="**/*.java" />
+                </replace>
               </tasks>
               <sourceRoot>target/generated-sources</sourceRoot>
             </configuration>
@@ -96,7 +113,10 @@
             <configuration>
               <tasks>
                 <mkdir dir="target/generated-test-sources" />
-                <exec executable="../src/protoc">
+                <exec executable="java">
+                  <arg value="-jar" />
+                  <arg value="${maven.dependency.com.github.os72.protoc-jar.jar.path}" />
+                  <arg value="-v261" />
                   <arg value="--java_out=target/generated-test-sources" />
                   <arg value="--proto_path=../src" />
                   <arg value="--proto_path=src/test/java" />
@@ -104,26 +124,23 @@
                   <arg value="../src/google/protobuf/unittest_import.proto" />
                   <arg value="../src/google/protobuf/unittest_import_public.proto" />
                   <arg value="../src/google/protobuf/unittest_mset.proto" />
-                  <arg value="src/test/java/com/google/protobuf/lazy_fields_lite.proto" />
-                  <arg value="src/test/java/com/google/protobuf/lite_equals_and_hash.proto" />
-                  <arg
-                    value="src/test/java/com/google/protobuf/multiple_files_test.proto" />
-                  <arg value="src/test/java/com/google/protobuf/nested_builders_test.proto" />
-                  <arg value="src/test/java/com/google/protobuf/nested_extension.proto" />
-                  <arg value="src/test/java/com/google/protobuf/nested_extension_lite.proto" />
-                  <arg value="src/test/java/com/google/protobuf/non_nested_extension.proto" />
-                  <arg value="src/test/java/com/google/protobuf/non_nested_extension_lite.proto" />
-                  <arg value="src/test/java/com/google/protobuf/outer_class_name_test.proto" />
-                  <arg value="src/test/java/com/google/protobuf/outer_class_name_test2.proto" />
-                  <arg value="src/test/java/com/google/protobuf/outer_class_name_test3.proto" />
-                  <arg value="src/test/java/com/google/protobuf/test_bad_identifiers.proto" />
-                  <arg value="src/test/java/com/google/protobuf/test_check_utf8.proto" />
-                  <arg value="src/test/java/com/google/protobuf/test_check_utf8_size.proto" />
-                  <arg value="src/test/java/com/google/protobuf/test_custom_options.proto" />
-                  <arg
-                    value="../src/google/protobuf/unittest_optimize_for.proto" />
-                  <arg
-                    value="../src/google/protobuf/unittest_custom_options.proto" />
+                  <arg value="src/test/java/com/github/os72/protobuf261/lazy_fields_lite.proto" />
+                  <arg value="src/test/java/com/github/os72/protobuf261/lite_equals_and_hash.proto" />
+                  <arg value="src/test/java/com/github/os72/protobuf261/multiple_files_test.proto" />
+                  <arg value="src/test/java/com/github/os72/protobuf261/nested_builders_test.proto" />
+                  <arg value="src/test/java/com/github/os72/protobuf261/nested_extension.proto" />
+                  <arg value="src/test/java/com/github/os72/protobuf261/nested_extension_lite.proto" />
+                  <arg value="src/test/java/com/github/os72/protobuf261/non_nested_extension.proto" />
+                  <arg value="src/test/java/com/github/os72/protobuf261/non_nested_extension_lite.proto" />
+                  <arg value="src/test/java/com/github/os72/protobuf261/outer_class_name_test.proto" />
+                  <arg value="src/test/java/com/github/os72/protobuf261/outer_class_name_test2.proto" />
+                  <arg value="src/test/java/com/github/os72/protobuf261/outer_class_name_test3.proto" />
+                  <arg value="src/test/java/com/github/os72/protobuf261/test_bad_identifiers.proto" />
+                  <arg value="src/test/java/com/github/os72/protobuf261/test_check_utf8.proto" />
+                  <arg value="src/test/java/com/github/os72/protobuf261/test_check_utf8_size.proto" />
+                  <arg value="src/test/java/com/github/os72/protobuf261/test_custom_options.proto" />
+                  <arg value="../src/google/protobuf/unittest_optimize_for.proto" />
+                  <arg value="../src/google/protobuf/unittest_custom_options.proto" />
                   <arg value="../src/google/protobuf/unittest_lite.proto" />
                   <arg value="../src/google/protobuf/unittest_import_lite.proto" />
                   <arg value="../src/google/protobuf/unittest_import_public_lite.proto" />
@@ -131,6 +148,9 @@
                   <arg value="../src/google/protobuf/unittest_enormous_descriptor.proto" />
                   <arg value="../src/google/protobuf/unittest_no_generic_services.proto" />
                 </exec>
+                <replace token="com.google.protobuf" value="com.github.os72.protobuf261" dir="target/generated-test-sources">
+                  <include name="**/*.java" />
+                </replace>
               </tasks>
               <testSourceRoot>target/generated-test-sources</testSourceRoot>
             </configuration>
@@ -152,6 +172,41 @@
           </instructions>
         </configuration>
       </plugin>
+		<plugin>
+		  <groupId>org.apache.maven.plugins</groupId>
+		  <artifactId>maven-jar-plugin</artifactId>
+		  <configuration>
+			<archive>
+			  <manifestEntries>
+				<Build-Id>${project.name}-${project.version}-${maven.build.timestamp}</Build-Id>
+			  </manifestEntries>
+			</archive>
+		  </configuration>
+		</plugin>
+		<plugin>
+		  <groupId>org.apache.maven.plugins</groupId>
+		  <artifactId>maven-source-plugin</artifactId>
+		  <executions>
+			<execution>
+			  <id>attach-sources</id>
+				<goals>
+				 <goal>jar</goal>
+				</goals>
+			</execution>
+		  </executions>
+		</plugin>
+		<plugin>
+		  <groupId>org.apache.maven.plugins</groupId>
+		  <artifactId>maven-javadoc-plugin</artifactId>
+		  <executions>
+			<execution>
+			  <id>attach-javadoc</id>
+				<goals>
+				 <goal>jar</goal>
+				</goals>
+			</execution>
+		  </executions>
+		</plugin>
     </plugins>
   </build>
   <profiles>
